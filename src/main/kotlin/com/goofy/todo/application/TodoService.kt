@@ -2,6 +2,8 @@ package com.goofy.todo.application
 
 import com.goofy.todo.domain.Todo
 import com.goofy.todo.infrastructure.TodoRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -13,7 +15,7 @@ class TodoService(
         return todoRepository.findByIdOrNull(id)
     }
 
-    fun findAll(): List<Todo> {
-        return todoRepository.findAll()
+    fun findAll(pageable: Pageable): Page<Todo> {
+        return todoRepository.findAll(pageable)
     }
 }

@@ -12,11 +12,11 @@ class TodoRouter(
     private val todoHandler: TodoHandler
 ) {
     @Bean
-    fun route() = nest(
+    fun routeTodo() = nest(
         path("/api/v1/todos"),
         router {
-                GET("/{id}", todoHandler::findById)
-                GET("", todoHandler::findAll)
+            GET("/{id}", todoHandler::findById)
+            GET("", todoHandler::findAll)
         }
     )
 }
