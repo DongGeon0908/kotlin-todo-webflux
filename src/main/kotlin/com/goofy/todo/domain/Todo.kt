@@ -27,4 +27,14 @@ class Todo(
 
     @Column(name = "is_active")
     var active: Boolean = true
-) : BaseEntity()
+) : BaseEntity() {
+    fun update(title: String, content: String, category: TodoCategory) {
+        this.title = title
+        this.content = content
+        this.category = category
+    }
+
+    fun changedActive(isActive: Boolean) {
+        this.active = isActive
+    }
+}

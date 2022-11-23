@@ -17,6 +17,10 @@ class TodoRouter(
         router {
             GET("/{id}", todoHandler::findById)
             GET("", todoHandler::findAll)
+            POST("", todoHandler::add)
+            PUT("/{id}", todoHandler::update)
+            PATCH("/{id}", todoHandler::changedActive)
+            DELETE("/{id}", todoHandler::delete)
         }
     )
 }
