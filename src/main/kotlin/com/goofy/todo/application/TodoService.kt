@@ -2,6 +2,7 @@ package com.goofy.todo.application
 
 import com.goofy.todo.domain.Todo
 import com.goofy.todo.dto.TodoRequest
+import com.goofy.todo.exception.TodoNotFoundException
 import com.goofy.todo.infrastructure.TodoRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -12,8 +13,8 @@ import org.springframework.stereotype.Service
 class TodoService(
     private val todoRepository: TodoRepository
 ) {
-    fun findById(id: Long): Todo? {
-        return todoRepository.findByIdOrNull(id)
+    fun findById(id: Long): Todo {
+        return todoRepository.findByIdOrNull(id) ?: throw TodoNotFoundException()
     }
 
     fun findAll(pageable: Pageable): Page<Todo> {
@@ -31,7 +32,7 @@ class TodoService(
     }
 
     fun update(id: Long, request: TodoRequest): Todo {
-        val todo = todoRepository.findByIdOrNull(id)!!
+        val todo = todoRepository.findByIdOrNull(id) ?: throw TodoNotFoundException()
 
         return todoRepository.save(
             todo.apply {
@@ -45,7 +46,7 @@ class TodoService(
     }
 
     fun changedActive(id: Long, isActive: Boolean): Todo {
-        val todo = todoRepository.findByIdOrNull(id)!!
+        val todo = todoRepository.findByIdOrNull(id) ?: throw TodoNotFoundException()
 
         return todoRepository.save(
             todo.apply { this.changedActive(isActive) }
@@ -53,6 +54,8 @@ class TodoService(
     }
 
     fun delete(id: Long) {
-        todoRepository.deleteById(id)
+        if (todoRepository.existsById(id)) {
+            todoRepository.deleteById(id)
+        }
     }
 }

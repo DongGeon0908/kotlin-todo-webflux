@@ -1,6 +1,7 @@
 package com.goofy.todo.router
 
 import com.goofy.todo.handler.TodoHandler
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.server.RequestPredicates.path
@@ -12,6 +13,7 @@ class TodoRouter(
     private val todoHandler: TodoHandler
 ) {
     @Bean
+    @ConditionalOnMissingBean(name = ["routeTodo"])
     fun routeTodo() = nest(
         path("/api/v1/todos"),
         router {

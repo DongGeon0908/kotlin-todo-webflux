@@ -2,6 +2,8 @@ package com.goofy.todo.handler
 
 import com.goofy.todo.application.TodoService
 import com.goofy.todo.dto.TodoRequest
+import com.goofy.todo.extension.param
+import com.goofy.todo.extension.response
 import com.goofy.todo.extension.wrapPage
 import com.goofy.todo.extension.wrapResponse
 import org.springframework.data.domain.PageRequest
@@ -28,15 +30,15 @@ class TodoHandler(
     }
 
     fun findAll(req: ServerRequest): Mono<ServerResponse> {
-        val page = req.queryParam("page").get().toInt()
-        val size = req.queryParam("size").get().toInt()
+        val page = req.param("page").toInt()
+        val size = req.param("size").toInt()
 
         val pageable = PageRequest.of(page, size)
-        val response = Mono.justOrEmpty(todoService.findAll(pageable).wrapPage())
+        val todos = todoService.findAll(pageable).wrapPage()
 
         return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(response)
+            .body(todos.response())
             .switchIfEmpty(ServerResponse.notFound().build())
     }
 
@@ -44,7 +46,7 @@ class TodoHandler(
         return req.bodyToMono(TodoRequest::class.java).flatMap {
             ServerResponse.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.justOrEmpty(todoService.add(it).wrapResponse()))
+                .body(todoService.add(it).wrapResponse().response())
                 .switchIfEmpty(ServerResponse.notFound().build())
         }
     }
@@ -55,7 +57,7 @@ class TodoHandler(
         return req.bodyToMono(TodoRequest::class.java).flatMap {
             ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.justOrEmpty(todoService.update(id, it).wrapResponse()))
+                .body(todoService.update(id, it).wrapResponse().response())
                 .switchIfEmpty(ServerResponse.notFound().build())
         }
     }
@@ -64,9 +66,11 @@ class TodoHandler(
         val id = req.pathVariable("id").toLong()
         val isActive = req.queryParam("isActive").get().toBoolean()
 
+        val todo = todoService.changedActive(id, isActive)
+
         return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
-            .body(Mono.justOrEmpty(todoService.changedActive(id, isActive)))
+            .body(todo.response())
             .switchIfEmpty(ServerResponse.notFound().build())
     }
 
