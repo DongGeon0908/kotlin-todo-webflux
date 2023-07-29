@@ -42,30 +42,41 @@ allOpen {
 }
 
 object DependencyVersion {
-    const val KOTLIN_LOGGING_VERSION = "3.0.4"
+    const val KOTLIN_LOGGING_VERSION = "3.0.5"
+    const val ARROW_FX_VERSION = "1.1.3"
 }
 
 dependencies {
-    // spring starter
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    /** spring starter */
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     kapt("org.springframework.boot:spring-boot-configuration-processor")
 
-    // kotlin
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    /** kotlin */
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-    // database
+    /** arrow-kt */
+    implementation("io.arrow-kt:arrow-fx-coroutines:${DependencyVersion.ARROW_FX_VERSION}")
+    implementation("io.arrow-kt:arrow-fx-stm:${DependencyVersion.ARROW_FX_VERSION}")
+
+    /** database */
     runtimeOnly("mysql:mysql-connector-java")
 
-    // database
+    /** logger */
     implementation("io.github.microutils:kotlin-logging:${DependencyVersion.KOTLIN_LOGGING_VERSION}")
 
-    // test
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
-    }
+    /** etc */
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+    /** test */
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks.getByName<Jar>("jar") {

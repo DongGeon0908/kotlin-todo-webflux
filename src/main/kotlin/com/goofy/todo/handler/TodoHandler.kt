@@ -1,11 +1,11 @@
 package com.goofy.todo.handler
 
-import com.goofy.todo.application.TodoService
+import com.goofy.todo.application.TodoV1Service
 import com.goofy.todo.dto.TodoRequest
 import com.goofy.todo.extension.param
 import com.goofy.todo.extension.response
 import com.goofy.todo.extension.wrapPage
-import com.goofy.todo.extension.wrapResponse
+import com.goofy.todo.extension.wrap
 import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -17,11 +17,11 @@ import reactor.core.publisher.Mono
 
 @Component
 class TodoHandler(
-    private val todoService: TodoService
+    private val todoService: TodoV1Service
 ) {
     fun findById(req: ServerRequest): Mono<ServerResponse> {
         val id = req.pathVariable("id").toLong()
-        val response = Mono.justOrEmpty(todoService.findById(id).wrapResponse())
+        val response = Mono.justOrEmpty(todoService.findById(id).wrap())
 
         return ServerResponse.ok()
             .contentType(MediaType.APPLICATION_JSON)
@@ -46,7 +46,7 @@ class TodoHandler(
         return req.bodyToMono(TodoRequest::class.java).flatMap {
             ServerResponse.status(HttpStatus.CREATED)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(todoService.add(it).wrapResponse().response())
+                .body(todoService.add(it).wrap().response())
                 .switchIfEmpty(ServerResponse.notFound().build())
         }
     }
@@ -57,7 +57,7 @@ class TodoHandler(
         return req.bodyToMono(TodoRequest::class.java).flatMap {
             ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(todoService.update(id, it).wrapResponse().response())
+                .body(todoService.update(id, it).wrap().response())
                 .switchIfEmpty(ServerResponse.notFound().build())
         }
     }

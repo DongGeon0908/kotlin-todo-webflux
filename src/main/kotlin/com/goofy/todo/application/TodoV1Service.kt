@@ -10,7 +10,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
-class TodoService(
+class TodoV1Service(
     private val todoRepository: TodoRepository
 ) {
     fun findById(id: Long): Todo {

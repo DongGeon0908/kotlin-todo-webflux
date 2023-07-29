@@ -1,4 +1,4 @@
-package com.goofy.todo.router
+package com.goofy.todo.resource
 
 import com.goofy.todo.handler.TodoHandler
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.server.RouterFunctions.nest
 import org.springframework.web.reactive.function.server.router
 
 @Configuration
-class TodoRouter(
+class TodoV1Resource(
     private val todoHandler: TodoHandler
 ) {
     @Bean

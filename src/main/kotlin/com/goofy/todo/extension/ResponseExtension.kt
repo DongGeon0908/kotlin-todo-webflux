@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page
 /**
  * Wrap Response Ok
  **/
-fun <T> T.wrapResponse() = ResponseDto(this)
+fun <T> T.wrap() = ResponseDto(this)
 
 /**
  * Wrap Response Page

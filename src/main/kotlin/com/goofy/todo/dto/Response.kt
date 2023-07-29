@@ -15,12 +15,16 @@ data class TodoResponse(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone = "Asia/Seoul")
     val modifiedAt: LocalDateTime
 ) {
-    constructor(todo: Todo) : this(
-        id = todo.id,
-        title = todo.title,
-        content = todo.content,
-        category = todo.category,
-        createdAt = todo.createdAt,
-        modifiedAt = todo.modifiedAt
-    )
+    companion object {
+        fun from(todo: Todo): TodoResponse {
+            return TodoResponse(
+                id = todo.id,
+                title = todo.title,
+                content = todo.content,
+                category = todo.category,
+                createdAt = todo.createdAt,
+                modifiedAt = todo.modifiedAt
+            )
+        }
+    }
 }

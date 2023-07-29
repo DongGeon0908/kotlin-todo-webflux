@@ -7,3 +7,8 @@ data class TodoRequest(
     val content: String,
     val category: TodoCategory
 )
+
+data class TodoSearchRequest(
+    val page: Int?,
+    val size: Int?
+)
