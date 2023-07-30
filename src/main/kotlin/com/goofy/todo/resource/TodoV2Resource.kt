@@ -1,12 +1,14 @@
 package com.goofy.todo.resource
 
 import com.goofy.todo.application.TodoV2Service
+import com.goofy.todo.dto.TodoRequest
 import com.goofy.todo.dto.TodoSearchRequest
 import com.goofy.todo.extension.wrap
 import com.goofy.todo.extension.wrapPage
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -22,4 +24,9 @@ class TodoV2Resource(
     suspend fun getAll(
         request: TodoSearchRequest
     ) = todoV2Service.getAll(request).wrapPage()
+
+    @PostMapping
+    suspend fun create(
+        request: TodoRequest
+    ) = todoV2Service.insert(request).wrap()
 }
