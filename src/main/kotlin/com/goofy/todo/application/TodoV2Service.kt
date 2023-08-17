@@ -39,13 +39,11 @@ class TodoV2Service(
     @Transactional
     suspend fun insert(request: TodoRequest): TodoResponse {
         val savedTodo = withContext(Dispatchers.IO) {
-            todoRepository.save(
-                Todo(
-                    title = request.title,
-                    content = request.content,
-                    category = request.category
-                )
-            )
+            Todo(
+                title = request.title,
+                content = request.content,
+                category = request.category
+            ).run { todoRepository.save(this) }
         }
 
         return TodoResponse.from(savedTodo)
